@@ -5,7 +5,7 @@ export const sequelize = new Sequelize(
   "root", 
   "password", 
   {
-    host: "localhost",
+    host: "127.0.0.1",
     dialect: "mysql",
     pool: {
       max: 5,

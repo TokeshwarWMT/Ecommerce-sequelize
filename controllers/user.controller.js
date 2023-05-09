@@ -2,7 +2,7 @@ import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-export const createUser = async (req, res) => {
+export async function createUser(req, res) {
   try {
     let data = req.body;
     let { name, email, password } = data;
@@ -30,14 +30,14 @@ export async function login(req, res) {
   try {
     let { email, password } = req.body;
     if (!email || !password) {
-      return req.status(400).send("email and password are required!");
+      return res.status(400).send("email and password are required!");
     }
     const user = await User.findOne({ where: { email: email } });
     const passMatch = await bcrypt.compare(password, user.password);
     if (passMatch) {
       const token = jwt.sign(
         {
-          id: user._id,
+          id: user.id,
         },
         "longstring"
       );
@@ -46,6 +46,7 @@ export async function login(req, res) {
       return res.status(400).send("email not found!");
     }
   } catch (error) {
-    return res.status(500).json( error );
+    console.log(error.message);
+    return res.status(500).json(error);
   }
-}
+};

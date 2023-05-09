@@ -28,38 +28,37 @@ export async function getAddresses(req, res) {
 
 export async function updateAddress(req, res) {
   const { id } = req.params;
-  // const { projectid, name, done } = req.body;
+  const { userId } = req.params;
+  const data = req.body;
+
+  if (userId !== req.user.id.toString()) {
+    return res.status(403).json("unauthorized access!");
+  };
+
   try {
-    // const updatedTask = await Task.update(
-    //   { name, done, projectid },
-    //   { where: { id } }
-    // );
-
-    const task = await Address.findOne({
-      attributes: ["name", "projectId", "done", "id"],
-      where: { id },
-    });
-
-    task.set(req.body);
-
-    await task.save();
-
-    res.json(task);
+    const address = await Address.findByPk(id);
+    if (!address) {
+      return res.status(404).json("Address not found");
+    }
+    const updatedAddress = await address.update(data);
+    return res.status(200).json(updatedAddress);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.log(error);
   }
 }
 
 export async function deleteAddress(req, res) {
   const { id } = req.params;
+  const { userId } = req.params;
+  if (userId !== req.user.id) {
+    return res.status(403).json("unauthorized access!");
+  }
   try {
-    await Address.destroy({
-      where: { id },
-    });
+    await Address.destroy({ where: { id: id } });
 
-    return res.sendStatus(204);
+    return res.status(200).json;
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json(error);
   }
 }
 

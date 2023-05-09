@@ -1,6 +1,5 @@
 import { Product } from "../models/Product.js";
 import { v2 as cloudinary } from "cloudinary";
-import { User } from "../models/User.js";
 
 cloudinary.config({
   cloud_name: "dbv10f3bf",
@@ -14,7 +13,6 @@ export async function createProduct(req, res) {
 
     let product = new Product(
       {
-        userId: req.body.userId,
         image: result.secure_url,
         title: req.body.title,
         category: req.body.category,
@@ -26,7 +24,6 @@ export async function createProduct(req, res) {
       },
       {
         fields: [
-          "userId",
           "image",
           "title",
           "category",
@@ -134,41 +131,5 @@ export async function updateProduct(req, res) {
     res.json(project);
   } catch (error) {
     return res.status(500).json({ message: error.message });
-  }
-}
-
-export async function getProductByUserId(req, res) {
-  const { id } = req.params;
-  try {
-    const user = await User.findByPk(id, {
-      include: [{ model: Product, as: "products" }],
-    });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    if (!user.products || user.products.length === 0) {
-      return res.status(404).json({ error: "User has no products" });
-    }
-
-    let products = user.products.map((product) => ({
-      id: product.id,
-      image: product.image,
-      title: product.title,
-      category: product.category,
-      ratings: product.ratings,
-      specifications: product.specifications,
-      price: product.price,
-      originalPrice: product.originalPrice,
-      userId: product.userId,
-    }));
-
-    products = products.length === 1 ? products[0] : products;
-
-    return res.status(200).json(products);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(error);
   }
 }

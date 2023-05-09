@@ -9,11 +9,10 @@ import {
 } from "../controllers/address.controller.js";
 import { authentication } from "../middleware/auth.js";
 
-// Routes
 router.post("/addAddress", addAddress);
 router.get("/getAddress/:id", authentication, getAddress);
-router.put("/:id", updateAddress);
-router.delete("/:id", deleteAddress);
+router.put("/updateAddress/:id/:userId", authentication, updateAddress);
+router.delete("deleteAddress/:id/:userId", authentication, deleteAddress);
 router.get("/", getAddresses);
 
 export default router;

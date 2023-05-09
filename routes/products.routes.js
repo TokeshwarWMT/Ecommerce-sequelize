@@ -5,17 +5,13 @@ import {
   createProduct,
   updateProduct,
   getProductDetails,
-  getProductByUserId,
 } from "../controllers/product.controller.js";
-import { authentication } from "../middleware/auth.js";
 
 import upload from "../utils/multer.js";
 
-router.post("/createProduct", upload.single("image"),authentication, createProduct);
-router.get("/getProductDetails/:id", authentication, getProductDetails);
-router.get("/getAllProduct", authentication, getAllProduct);
-router.put("/updateProduct/:id", authentication, updateProduct);
-
-router.get("/getProductByUserId/:id", authentication, getProductByUserId);
+router.post("/createProduct", upload.single("image"), createProduct);
+router.get("/getProductDetails/:id", getProductDetails);
+router.get("/getAllProduct", getAllProduct);
+router.put("/updateProduct/:id", updateProduct);
 
 export default router;

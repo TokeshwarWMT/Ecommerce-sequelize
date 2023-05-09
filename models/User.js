@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
-import { Product } from "./Product.js";
 import { Address } from "./Address.js";
 
 export const User = sequelize.define(
@@ -20,9 +19,11 @@ export const User = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
@@ -30,13 +31,9 @@ export const User = sequelize.define(
   }
 );
 
-User.hasMany(Product, {
-  foreinkey: "userId",
-  sourceKey: "id",
-});
 User.hasMany(Address, {
   foreinkey: "userId",
   sourceKey: "id",
 });
-Product.belongsTo(User, { foreinkey: "userId", targetId: "id" });
+
 Address.belongsTo(User, { foreinkey: "userId", targetId: "id" });
