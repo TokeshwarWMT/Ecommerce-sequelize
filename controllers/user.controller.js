@@ -41,21 +41,12 @@ export async function login(req, res) {
         },
         "longstring"
       );
-      res.status(200).send({ token: token });
+      res.status(200).send({ token: token, userId: user.dataValues.id });
     } else {
       return res.status(400).send("email not found!");
     }
   } catch (error) {
-    return res.status(500).json(error);
-  }
-}
-
-export async function getUser(req, res) {
-  let { id } = req.params;
-  try {
-    const user = await User.findOne({ where: { id: id } });
-    return res.status(200).json(user);
-  } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 }
