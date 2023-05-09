@@ -51,11 +51,16 @@ export async function login(req, res) {
 };
 
 export async function getUser(req, res) {
-  let {id} = req.params;
+  const userId = req.user.id;
   try {
-    const user = await User.findOne({where: {id: id}});
-    return res.status(200).json(user);
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json("User not found!");
+    } else {
+      return res.status(200).json(user);
+    }
   } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 };
