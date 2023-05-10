@@ -9,28 +9,33 @@ cloudinary.config({
 
 export async function createProduct(req, res) {
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
-
+    let images = [];
+    for (let i = 0; i < req.files.length; i++) {
+      const result = await cloudinary.uploader.upload(req.files[i].path);
+      images.push(result.secure_url);
+    }
     let product = new Product(
       {
-        image: result.secure_url,
+        images: images,
         title: req.body.title,
         category: req.body.category,
         ratings: req.body.ratings,
-        specifications: req.body.specifications,
         price: req.body.price,
         originalPrice: req.body.originalPrice,
+        description: req.body.description,
+        brand: req.body.brand,
         offers: req.body.offers.split(","),
       },
       {
         fields: [
-          "image",
+          "images",
           "title",
           "category",
           "ratings",
-          "specifications",
           "price",
           "originalPrice",
+          "description",
+          "brand",
           "offers",
         ],
       }
@@ -38,9 +43,14 @@ export async function createProduct(req, res) {
     await product.save();
     return res.status(201).json(product);
   } catch (error) {
+    console.log(error)
     return res.status(500).json(error);
   }
 }
+
+
+
+
 
 export async function getProductDetails(req, res) {
   const { id } = req.params;

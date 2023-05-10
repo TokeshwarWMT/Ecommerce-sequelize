@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+import helmet from "helmet";
 
 const app = express();
 
@@ -10,6 +11,7 @@ import addressRoutes from "./routes/addresses.routes.js";
 
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(helmet());
 app.use(
   cors({
     origin: true,

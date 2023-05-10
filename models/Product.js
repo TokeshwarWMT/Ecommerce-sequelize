@@ -10,9 +10,16 @@ export const Product = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    image: {
-      type: DataTypes.STRING,
+    images: {
+      type: DataTypes.TEXT('long'),
       allowNull: false,
+      get() {
+        const images = this.getDataValue("images");
+        return images ? images.split(",") : [];
+      },
+      set(value) {
+        this.setDataValue("images", value.join(","));
+      },
     },
     title: {
       type: DataTypes.STRING,
@@ -29,10 +36,6 @@ export const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    specifications: {
-      type: DataTypes.JSON,
-      allowNull: false,
-    },
     price: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -40,6 +43,14 @@ export const Product = sequelize.define(
     originalPrice: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    brand: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     offers: {
       type: DataTypes.STRING,
