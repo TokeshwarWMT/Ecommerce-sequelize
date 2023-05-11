@@ -1,6 +1,7 @@
 import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { Address } from "../models/Address.js";
 
 export async function createUser(req, res) {
   try {
@@ -24,7 +25,7 @@ export async function createUser(req, res) {
   } catch (error) {
     return res.status(500).json(error);
   }
-};
+}
 
 export async function login(req, res) {
   try {
@@ -48,7 +49,7 @@ export async function login(req, res) {
   } catch (error) {
     return res.status(500).json(error);
   }
-};
+}
 
 export async function getUser(req, res) {
   const userId = req.user.id;
@@ -62,4 +63,14 @@ export async function getUser(req, res) {
   } catch (error) {
     return res.status(500).json(error);
   }
-};
+}
+
+export async function getAddressByUserId(req, res) {
+  const { userId } = req.params;
+  try {
+    const tasks = await Address.findOne({ where: { userId: userId } });
+    res.json(tasks);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+}

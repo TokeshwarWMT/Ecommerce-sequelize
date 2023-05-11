@@ -20,10 +20,13 @@ export async function createProduct(req, res) {
         title: req.body.title,
         category: req.body.category,
         ratings: req.body.ratings,
+        specifications: req.body.specifications,
         price: req.body.price,
         originalPrice: req.body.originalPrice,
         description: req.body.description,
         brand: req.body.brand,
+        material_care: req.body.material_care,
+        size: req.body.size.split(","),
         offers: req.body.offers.split(","),
       },
       {
@@ -32,10 +35,13 @@ export async function createProduct(req, res) {
           "title",
           "category",
           "ratings",
+          "specifications",
           "price",
           "originalPrice",
           "description",
           "brand",
+          "material_care",
+          "size",
           "offers",
         ],
       }
@@ -47,10 +53,6 @@ export async function createProduct(req, res) {
     return res.status(500).json(error);
   }
 }
-
-
-
-
 
 export async function getProductDetails(req, res) {
   const { id } = req.params;
@@ -123,7 +125,7 @@ export async function getAllProduct(req, res) {
 
     return res.status(200).json(products);
   } catch (error) {
-    return res.status(500).json(error.message);
+    return res.status(500).json(error);
   }
 }
 
@@ -137,9 +139,8 @@ export async function updateProduct(req, res) {
     Product.priority = priority;
     project.description = description;
     await project.save();
-
-    res.json(project);
+    return res.json(project);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json(error);
   }
 }

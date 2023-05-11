@@ -8,6 +8,8 @@ const app = express();
 import userRoutes from "./routes/users.routes.js";
 import productRoutes from "./routes/products.routes.js";
 import addressRoutes from "./routes/addresses.routes.js";
+import cartRoutes from "./routes/carts.routes.js";
+import withlistRoutes from "./routes/wishlist.routes.js";
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -27,6 +29,8 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/addresses", addressRoutes);
+app.use("/api/carts", cartRoutes);
+app.use("/api/wishlists", withlistRoutes);
 
 app.use("*", (req, res) => {
   return res.status(404).json("route not found!");
