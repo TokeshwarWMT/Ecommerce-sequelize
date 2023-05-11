@@ -1,6 +1,5 @@
 import app from "./app.js";
 import { sequelize } from "./database/database.js";
-import "./models/Association.js"; // import the associations file
 
 async function main() {
   await sequelize.sync({ force: false });
