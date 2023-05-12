@@ -10,6 +10,10 @@ export const Product = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    adminId:{
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     images: {
       type: DataTypes.TEXT("long"),
       allowNull: false,

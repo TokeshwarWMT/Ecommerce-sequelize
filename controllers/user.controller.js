@@ -2,6 +2,7 @@ import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Address } from "../models/Address.js";
+import { Product } from "../models/Product.js";
 
 export async function createUser(req, res) {
   try {
@@ -70,6 +71,19 @@ export async function getAddressByUserId(req, res) {
   try {
     const tasks = await Address.findOne({ where: { userId: userId } });
     res.json(tasks);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+}
+
+export async function getProductDetails(req, res) {
+  const { id } = req.params;
+  try {
+    const product = await Product.findOne({
+      where: { id: id },
+      attributes: { exclude: ["adminId"] },
+    });
+    return res.status(200).json(product);
   } catch (error) {
     return res.status(500).json(error);
   }

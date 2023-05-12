@@ -5,12 +5,13 @@ import {
   createProduct,
   updateProduct,
   getProductDetails,
-} from "../controllers/product.controller.js";
+} from "../controllers/adminProduct.controller.js";
 
 import upload from "../utils/multer.js";
+import { adminAuthentication } from "../middleware/auth.js";
 
 router.post("/createProduct", upload.array("images"), createProduct);
-router.get("/getProductDetails/:id", getProductDetails);
+router.get("/getProductDetails/:id", adminAuthentication, getProductDetails);
 router.get("/getAllProduct", getAllProduct);
 router.put("/updateProduct/:id", updateProduct);
 

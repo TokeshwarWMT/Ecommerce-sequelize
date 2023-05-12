@@ -1,11 +1,6 @@
-import { Product } from "../models/Product.js";
+import { Admin } from "../models/Admin.js";
+import Product from "../models/Product.js";
 import { v2 as cloudinary } from "cloudinary";
-
-cloudinary.config({
-  cloud_name: "dbv10f3bf",
-  api_key: "474116116625175",
-  api_secret: "UU-WYsG12QFKvYzA7gVo_u6ZjbI",
-});
 
 export async function createProduct(req, res) {
   try {
@@ -16,6 +11,7 @@ export async function createProduct(req, res) {
     }
     let product = new Product(
       {
+        adminId: req.body.adminId,
         images: images,
         title: req.body.title,
         category: req.body.category,
@@ -31,6 +27,7 @@ export async function createProduct(req, res) {
       },
       {
         fields: [
+          "adminId",
           "images",
           "title",
           "category",
@@ -49,17 +46,26 @@ export async function createProduct(req, res) {
     await product.save();
     return res.status(201).json(product);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json(error);
   }
 }
 
 export async function getProductDetails(req, res) {
   const { id } = req.params;
+  const adminId = req.admin.id;
   try {
-    const product = await Product.findOne({ where: { id: id } });
-    return res.status(200).json(product);
+    const admin = await Admin.findByPk(adminId);
+    if (admin) {
+      const product = await Product.findOne({
+        where: { id: id },
+      });
+      return res.status(200).json(product);
+    } else {
+      return res.status(403).json("Unauthorized access!");
+    }
   } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 }
