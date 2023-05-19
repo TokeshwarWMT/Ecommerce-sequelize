@@ -41,7 +41,7 @@ export async function login(req, res) {
         {
           id: user.id,
         },
-        "longstring"
+        process.env.USER_SECRET_KEY
       );
       res.status(200).send({ token: token, userId: user.dataValues.id });
     } else {
@@ -88,3 +88,5 @@ export async function getProductDetails(req, res) {
     return res.status(500).json(error);
   }
 }
+
+

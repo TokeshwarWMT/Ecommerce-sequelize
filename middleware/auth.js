@@ -7,7 +7,7 @@ export async function authentication(req, res, next) {
       return res.status(401).json("please input token!");
     }
 
-    let decodeToken = jwt.verify(token, "longstring");
+    let decodeToken = jwt.verify(token, process.env.USER_SECRET_KEY);
     req.user = decodeToken;
     next();
   } catch (error) {
@@ -22,7 +22,7 @@ export async function adminAuthentication(req, res, next) {
       return res.status(401).json("please input token!");
     }
 
-    let decodeToken = jwt.verify(token, "longstring");
+    let decodeToken = jwt.verify(token, process.env.ADMIN_SECRET_KEY);
     req.admin = decodeToken;
     next();
   } catch (error) {

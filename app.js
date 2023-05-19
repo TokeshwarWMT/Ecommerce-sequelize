@@ -17,11 +17,10 @@ import cartRoutes from "./routes/carts.routes.js";
 import withlistRoutes from "./routes/wishlist.routes.js";
 
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -50,4 +49,5 @@ app.use("*", (req, res) => {
   return res.status(404).json("route not found!");
 });
 
+// app.listen(process.env.PORT);
 export default app;

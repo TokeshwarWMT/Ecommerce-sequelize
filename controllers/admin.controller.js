@@ -35,7 +35,7 @@ export async function adminLogin(req, res) {
     }
     const admin = await Admin.findOne({ where: { email: email } });
     if (!admin) {
-        return res.status(404).json("email not found!")
+      return res.status(404).json("email not found!");
     }
     const passMatch = await bcrypt.compare(password, admin.password);
     if (passMatch) {
@@ -43,7 +43,7 @@ export async function adminLogin(req, res) {
         {
           id: admin.id,
         },
-        "longstring"
+        process.env.ADMIN_SECRET_KEY
       );
       res.status(200).json({ token: token, adminId: admin.dataValues.id });
     } else {
@@ -67,5 +67,3 @@ export async function getAdmin(req, res) {
     return res.status(500).json(error);
   }
 }
-
-

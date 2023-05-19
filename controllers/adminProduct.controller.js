@@ -43,10 +43,12 @@ export async function createProduct(req, res) {
         ],
       }
     );
-    await product.save();
-    return res.status(201).json(product);
+    // res.send(product);
+    // console.log(product);
+    product = await product.save();
+    return res.json(product);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     return res.status(500).json(error);
   }
 }
@@ -64,6 +66,58 @@ export async function getProductDetails(req, res) {
     } else {
       return res.status(403).json("Unauthorized access!");
     }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+}
+
+export async function getAllProducts(req, res) {
+  try {
+    const products = await Product.findAll({
+      attributes: { include: ["adminId"] },
+    });
+    return res.status(200).json(products);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+}
+
+export async function updateProduct(req, res) {
+  try {
+    const productId = req.params.id;
+
+    let product = await Product.findOne({ where: { id: productId } });
+
+    let newImages = [];
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        const result = await cloudinary.uploader.upload(req.files[i].path);
+        newImages.push(result.secure_url);
+      }
+    }
+
+    product.adminId = req.body.adminId || product.adminId;
+    product.images = newImages.length > 0 ? newImages : product.images;
+    product.title = req.body.title || product.title;
+    product.category = req.body.category || product.category;
+    product.ratings = req.body.ratings || product.ratings;
+    product.specifications = {
+      ...product.specifications,
+      ...req.body.specifications,
+    };
+    product.price = req.body.price || product.price;
+    product.originalPrice = req.body.originalPrice || product.originalPrice;
+    product.description = req.body.description || product.description;
+    product.brand = req.body.brand || product.brand;
+    product.material_care = req.body.material_care || product.material_care;
+    product.size = req.body.size ? req.body.size.split(",") : product.size;
+    product.offers = req.body.offers
+      ? req.body.offers.split(",")
+      : product.offers;
+
+    await product.save();
+    return res.status(200).json(product);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
@@ -130,22 +184,6 @@ export async function getAllProduct(req, res) {
     products = await Product.findAll({ where: whereClause });
 
     return res.status(200).json(products);
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-}
-
-export async function updateProduct(req, res) {
-  try {
-    const { id } = req.params;
-    const { name, priority, description } = req.body;
-
-    const Product = await Product.findByPk(id);
-    Product.name = name;
-    Product.priority = priority;
-    project.description = description;
-    await project.save();
-    return res.json(project);
   } catch (error) {
     return res.status(500).json(error);
   }

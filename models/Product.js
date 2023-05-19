@@ -5,14 +5,14 @@ export const Product = sequelize.define(
   "product",
   {
     id: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    adminId:{
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    adminId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     images: {
       type: DataTypes.TEXT("long"),
